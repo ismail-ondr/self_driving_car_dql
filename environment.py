@@ -20,7 +20,7 @@ class Environment:
 
         self.keyboard_control = keyboard_control
         self.action_space = [
-            0,     # left
+            0,      # left
             1,      # straight
             2       # right
         ]
@@ -47,16 +47,16 @@ class Environment:
                 self.car.rotation_angle -= 5
 
     def update(self, action):
-        reward = 3
+        reward = 5
         if action == 0:
             self.car.rotation_angle += 5
-        elif action == 1:
-            reward += 1
-            pass
+
         elif action == 2:
             self.car.rotation_angle -= 5
 
         self.render()
+        if self.car.is_crash():
+            reward = -10
         return self.get_observation_space(), reward, self.car.is_crash()
 
 
@@ -66,8 +66,8 @@ class Environment:
         self.screen.blit(self.background_image, (0, 0))
         self.car.draw()
 
-        if self.car.is_crash():
-            self.reset()
+        # if self.car.is_crash():
+        #     self.reset()
         # print(pygame.mouse.get_pos())
         pygame.display.flip()
 
