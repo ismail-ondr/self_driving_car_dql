@@ -3,12 +3,9 @@ from environment import Environment
 from dql_agent import DQLAgent
 import matplotlib.pyplot as plt
 
-if __name__ == "__main__":
-    env = Environment(keyboard_control=False)
-    # env.run()
 
+def train(env):
     agent = DQLAgent(env)
-
     batch_size = 16
     episodes = 200
     time_array = []
@@ -41,6 +38,7 @@ if __name__ == "__main__":
             # adjust epsilon
             agent.adaptiveEGreedy()
 
+            env.handle_events()
             time += 1
 
             if done or total_reward > 10000:
@@ -60,3 +58,43 @@ if __name__ == "__main__":
     plt.legend()
     plt.grid(True)
     plt.savefig('plot.png')
+
+def test(env, model_path):
+    agent = DQLAgent(env, model_path)
+    for e in range(10):
+
+        state = env.reset()
+
+        time = 0
+        total_reward = 0
+        while True:
+            # act
+            action = agent.act(state)  # select an action
+
+            # step
+            next_state, reward, done = env.update(action)
+
+            total_reward += reward
+
+            # update state
+            state = next_state
+            env.handle_events()
+
+            time += 1
+            if done:
+                print("Episode: {}, time: {}, reward: {}".format(e, time, total_reward))
+                break
+
+
+if __name__ == "__main__":
+
+    env = Environment(keyboard_control=False)
+    # env.run()
+    # train(env)
+    test(env, "model/model40.pt")
+
+
+
+
+
+

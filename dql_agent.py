@@ -7,7 +7,7 @@ import random
 
 
 class DQLAgent:
-    def __init__(self, env):
+    def __init__(self, env, model_path=""):
         # parameter / hyperparameter
         self.env = env
         self.state_size = len(env.get_observation_space())
@@ -21,8 +21,13 @@ class DQLAgent:
         self.epsilon_min = 0.01
 
         self.memory = deque([], maxlen=10000)
-
         self.model = self.build_model()
+        self.model_path = model_path
+
+        if not self.model_path == "":
+            self.model.load_state_dict(torch.load(self.model_path))
+            self.model.eval()
+
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(self.device)
 
@@ -48,7 +53,7 @@ class DQLAgent:
 
     def act(self, state):
         # acting: explore or exploit
-        if random.uniform(0, 1) <= self.epsilon:
+        if random.uniform(0, 1) <= self.epsilon and self.model_path == "":
             return random.choice(self.env.action_space)
         else:
             state_tensors = torch.tensor(np.array(state), dtype=torch.float32, device=self.device)
