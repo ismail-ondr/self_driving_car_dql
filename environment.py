@@ -1,6 +1,7 @@
 from car import Car
 import pygame
 import sys
+import random
 
 
 class Environment:
@@ -11,12 +12,14 @@ class Environment:
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Self Driving Car")
 
-        self.background_image = pygame.transform.scale(pygame.image.load("resources/path1.png"),
+        self.paths = ["resources/path1.png", "resources/path2.png"]
+        self.start_points = [(490, 562), (710, 575)]
+
+        index = random.randint(0, 1)
+        self.background_image = pygame.transform.scale(pygame.image.load(self.paths[index]),
                                                        (self.width, self.height))
 
-        self.clock = pygame.time.Clock()
-
-        self.car = Car(self.screen)
+        self.car = Car(self.screen, self.start_points[index])
 
         self.keyboard_control = keyboard_control
         self.action_space = [
@@ -25,6 +28,7 @@ class Environment:
             2       # right
         ]
 
+        self.clock = pygame.time.Clock()
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -72,7 +76,11 @@ class Environment:
         pygame.display.flip()
 
     def reset(self):
-        self.car = Car(self.screen)
+        index = random.randint(0, 1)
+        self.background_image = pygame.transform.scale(pygame.image.load(self.paths[index]),
+                                                       (self.width, self.height))
+
+        self.car = Car(self.screen, self.start_points[index])
         return self.get_observation_space()
 
     def get_observation_space(self):

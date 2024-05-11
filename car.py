@@ -5,8 +5,8 @@ import math
 
 
 class Car:
-    def __init__(self, screen):
-        self.pos_x, self.pos_y = 490, 562
+    def __init__(self, screen, start_point):
+        self.pos_x, self.pos_y = start_point
         self.car_speed = 5
         self.width, self.height = 50, 30
         self.color = (0, 128, 255)
