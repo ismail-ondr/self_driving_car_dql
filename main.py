@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     env = Environment(keyboard_control=False)
-    #env.run()
-
+    # env.run()
 
     agent = DQLAgent(env)
 
