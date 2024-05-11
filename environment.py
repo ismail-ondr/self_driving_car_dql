@@ -74,6 +74,7 @@ class Environment:
         #     self.reset()
         # print(pygame.mouse.get_pos())
         pygame.display.flip()
+        self.clock.tick(20)
 
     def reset(self):
         index = random.randint(0, 1)
@@ -95,4 +96,4 @@ class Environment:
 
             self.handle_keyboard_actions()
             self.render()
-            self.clock.tick(30)
+
