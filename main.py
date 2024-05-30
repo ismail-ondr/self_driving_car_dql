@@ -1,7 +1,12 @@
+import pygame
 import torch
+from PyQt5.QtWidgets import QApplication
+
 from environment import Environment
 from dql_agent import DQLAgent
 import matplotlib.pyplot as plt
+from chart_window import MainWindow
+import sys
 
 
 def train(env):
@@ -86,15 +91,20 @@ def test(env, model_path):
                 break
 
 
+# if __name__ == "__main__":
+#
+#     env = Environment(keyboard_control=False)
+#     # env.run()
+#     # train(env)
+#     test(env, "model/model40.pt")
+
+
+
 if __name__ == "__main__":
-
-    env = Environment(keyboard_control=False)
-    # env.run()
-    # train(env)
-    test(env, "model/model40.pt")
-
-
-
-
+    pygame.init()
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
 
 

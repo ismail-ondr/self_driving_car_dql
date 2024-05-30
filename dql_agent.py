@@ -54,12 +54,13 @@ class DQLAgent:
     def act(self, state):
         # acting: explore or exploit
         if random.uniform(0, 1) <= self.epsilon and self.model_path == "":
-            return random.choice(self.env.action_space)
+            return random.choice(self.env.action_space), [0,0,0]
         else:
             state_tensors = torch.tensor(np.array(state), dtype=torch.float32, device=self.device)
             q_values = self.model(state_tensors)
             a = torch.argmax(q_values).item()
-            return a
+            output_percentages = torch.nn.functional.softmax(q_values, dim=0) * 100
+            return a, output_percentages
 
     def replay(self, batch_size):
         # training
