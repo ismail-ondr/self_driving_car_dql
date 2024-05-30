@@ -36,7 +36,7 @@ class Car:
         for radar in self.radars:
             pygame.draw.line(self.screen, (0, 0, 255, 0), (radar.start_pos_x, radar.start_pos_y),
                              (radar.end_pos_x, radar.end_pos_y), 2)
-            pygame.draw.circle(self.screen, (0, 255, 0, 0), (radar.end_pos_x, radar.end_pos_y), 2)
+            pygame.draw.circle(self.screen, (255, 0, 0, 0), (radar.end_pos_x, radar.end_pos_y), 2)
 
     def get_radar_start_points(self):
 

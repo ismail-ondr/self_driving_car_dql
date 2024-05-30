@@ -1,19 +1,24 @@
+from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QWidget
+
 from car import Car
 import pygame
 import sys
 import random
 
 
-class Environment:
-    def __init__(self, keyboard_control=True):
-        pygame.init()
+class Environment(QWidget):
+
+    def __init__(self,keyboard_control=True, parent=None):
+        super().__init__(parent)
+        #pygame.init()
 
         self.width, self.height = 1250, 720
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Self Driving Car")
 
-        self.paths = ["resources/path1.png", "resources/path2.png"]
-        self.start_points = [(490, 562), (710, 575)]
+        self.paths = ["resources/path1.png", "resources/path2.png", "resources/path3.png"]
+        self.start_points = [(490, 562), (710, 575), (770, 57)]
 
         index = random.randint(0, 1)
         self.background_image = pygame.transform.scale(pygame.image.load(self.paths[index]),
@@ -29,6 +34,7 @@ class Environment:
         ]
 
         self.clock = pygame.time.Clock()
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -54,16 +60,15 @@ class Environment:
         reward = 5
         if action == 0:
             self.car.rotation_angle += 5
-
+        elif action == 1:
+            reward = 6
         elif action == 2:
             self.car.rotation_angle -= 5
 
         self.render()
         if self.car.is_crash():
-            reward = -10
+            reward = -50
         return self.get_observation_space(), reward, self.car.is_crash()
-
-
 
     def render(self):
         self.screen.fill((255, 255, 255))  # Beyaz arka plan
@@ -93,7 +98,6 @@ class Environment:
     def run(self):
         while True:
             self.handle_events()
-
             self.handle_keyboard_actions()
             self.render()
 
